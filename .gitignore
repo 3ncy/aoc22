@@ -1,1 +1,2 @@
-*.in.* #exclude test files
+# exclude test files
+# *.in.* actually don't, I wanna include them

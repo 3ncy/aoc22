@@ -1,5 +1,5 @@
 const fs = require('fs');
-let input = fs.readFileSync('1.in.txt').toString();
+let input = fs.readFileSync('./tests/1.in.txt').toString();
 
 let elves = input.split("\n\n");
 

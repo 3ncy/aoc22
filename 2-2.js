@@ -1,5 +1,5 @@
 const fs = require('fs');
-let input = fs.readFileSync('2.in.txt').toString().split("\n");
+let input = fs.readFileSync('./tests/2.in.txt').toString().split("\n");
 //yes, it could be joined into one .map()
 //no, I cba to do that
 input = input.map(x => x.split(" "));
