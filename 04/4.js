@@ -1,5 +1,5 @@
 const fs = require('fs');
-let input = fs.readFileSync('./tests/4.in.txt').toString().split("\n").map(x =>
+let input = fs.readFileSync('./4.in.txt').toString().split("\n").map(x =>
     x.split(',').map(x => x.split('-'))
 );
 

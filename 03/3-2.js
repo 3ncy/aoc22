@@ -1,5 +1,5 @@
 const fs = require('fs');
-let input = fs.readFileSync('./tests/3.in.txt').toString().split("\n");
+let input = fs.readFileSync('./3.in.txt').toString().split("\n");
 
 let groups = [];
 for (let i = 0; i < input.length; i += 3) {

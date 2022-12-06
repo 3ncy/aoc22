@@ -1,5 +1,5 @@
 const fs = require('fs');
-let input = fs.readFileSync('./tests/3.in.txt').toString().split("\n").map(x => {
+let input = fs.readFileSync('./3.in.txt').toString().split("\n").map(x => {
     let a = [];
     a[0] = x.slice(0, x.length / 2);
     a[1] = x.slice(x.length / 2);

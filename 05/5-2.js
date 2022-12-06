@@ -1,5 +1,5 @@
 const fs = require('fs');
-let input = fs.readFileSync('./tests/5.in.txt').toString().split("\n");
+let input = fs.readFileSync('./5.in.txt').toString().split("\n");
 let instructions = input.splice(input.indexOf('') + 1);
 input.pop();//remove the spliting lines between the cargo and instructions 
 input.pop();
