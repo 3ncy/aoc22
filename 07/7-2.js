@@ -1,18 +1,18 @@
 var fs = require("fs");
 let input = fs.readFileSync("in.txt").toString().split("\n");
 
-let files = {};
-let currentDir = files;
-let path = [];
+let files = { "/": {} };
+let currentDir = files["/"];
+let path = ["/"];
 let directories = [];
 
 for (let line of input) {
     line = line.split(" ");
-    if (line[0] === "$") { // is a command
+    if (line[0] === "$") { // line is a command
         if (line[1] === "cd") {
             if (line[2] === "/") {
-                currentDir = files;
-                path = [];
+                currentDir = files["/"];
+                path = ["/"];
             } else if (line[2] === "..") {
                 path.pop();
                 goToDir(path);
@@ -21,19 +21,17 @@ for (let line of input) {
                 currentDir = currentDir[line[2]]
             }
         }
-    } else { // is output of ls
+    } else { // line is an output of ls
         if (!currentDir.hasOwnProperty(line[1])) {
             if (line[0] === "dir") {
                 currentDir[line[1]] = {};
-                // directories[line[1]] = structuredClone(path); //TODO: this could be substituted by a .join('.') and then by .split('.'), the question is, which one is more performant
-
                 if (path.length === 0) {
                     // directories[line[1]] = line[1];
                     directories.push(line[1])
                 } else {
 
                     // directories[line[1]] = path.join('.') + "." + line[1];
-                    directories.push(path.join('/') + "/" + line[1]);
+                    directories.push(path.join('-') + "-" + line[1]);
                 }
             } else {
                 currentDir[line[1]] = Number(line[0]);
@@ -42,7 +40,7 @@ for (let line of input) {
         }
     }
 }
-
+console.log("files:")
 console.log(files);
 // console.log(path);
 
@@ -55,41 +53,43 @@ function goToDir(path) {
 }
 
 
-let sum = 0;
-//it may be required in the 2nd part to identify which folders are small or sth
-// let smallDirSizes = [];
-console.log(directories);
+// let sum = 0;
+
+let freeSpace = 70_000_000 - getSizeOfDir(["/"]);
+let neededSpace = 30_000_000 - freeSpace;
+console.log(`have free: ${freeSpace}, need additional: ${neededSpace}`);
+
+
+directories.push("/");
+console.log({ directories: directories });
+
+let prevClosest = 70_000_000;
+
 for (let dir of directories) {
-    //for each directory
+    let folderSize = getSizeOfDir(dir.split('-'));
 
-    console.log(dir.split('/'));
-    // goTo(dir.split('/'));
-    //run thorugh all files + dirs in there
-    let folderSize = getSizeOfDir(dir.split('/'));
-    if (folderSize <= 100000) {
-        sum += folderSize;
-    }
+    if(neededSpace - folderSize < 0 && folderSize < prevClosest) prevClosest = folderSize;
+
+    console.log({ dir: dir, size: folderSize });
 }
-console.log(sum);
 
+console.log("We need to remove the folder with the size of: " + prevClosest);
 
 
 function getSizeOfDir(path) {
     let sum = 0;
     goToDir(path);
-    console.log({ current: currentDir });
-
 
     Object.keys(currentDir).forEach((item, index) => {
         if (typeof currentDir[item] === "number") {
             sum += currentDir[item];
         } else { //it's a directory
             //recursion
-
             let tempPath = JSON.parse(JSON.stringify(path));
             path.push(item);
-            // path.shift();
+
             sum += getSizeOfDir(path)
+
             path = JSON.parse(JSON.stringify(tempPath));
             goToDir(path);
         }
@@ -97,6 +97,7 @@ function getSizeOfDir(path) {
 
     return sum;
 }
+
 
 
 /*
